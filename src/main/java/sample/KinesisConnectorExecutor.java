@@ -21,6 +21,7 @@ import com.amazonaws.services.kinesis.connectors.KinesisConnectorConfiguration;
 import com.amazonaws.services.kinesis.connectors.KinesisConnectorExecutorBase;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -68,7 +69,12 @@ public abstract class KinesisConnectorExecutor<T, U> extends KinesisConnectorExe
         }
         if(s3uri != null && s3uri.getScheme().equals("s3")) {
             AmazonS3 s3Client = new AmazonS3Client();
-            configStream = s3Client.getObject(s3uri.getHost(), s3uri.getPath()).getObjectContent();
+            String path = s3uri.getPath();
+            if(path.charAt(0) == '/') {
+                path = path.substring(1);
+            }
+            LOG.info(String.format("Attempting to read configuration from bucket:%s object:%s", s3uri.getHost(), path));
+            configStream = s3Client.getObject(new GetObjectRequest(s3uri.getHost(), path)).getObjectContent();
         }
         else {
             configStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(configFile);
