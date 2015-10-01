@@ -14,8 +14,6 @@
  */
 package sample;
 
-import com.amazonaws.services.kinesis.connectors.impl.StringToByteArrayTransformer;
-
 import com.amazonaws.services.kinesis.connectors.KinesisConnectorConfiguration;
 import com.amazonaws.services.kinesis.connectors.impl.AllPassFilter;
 import com.amazonaws.services.kinesis.connectors.impl.BasicMemoryBuffer;
@@ -49,7 +47,7 @@ public class S3Pipeline implements IKinesisConnectorPipeline<String, byte[]> {
 
     @Override
     public ITransformer<String, byte[]> getTransformer(KinesisConnectorConfiguration configuration) {
-        return new StringToByteArrayTransformer();
+        return new StringToByteArrayTransformerWithNewlines();
     }
 
     @Override
