@@ -37,7 +37,7 @@ public class S3Pipeline implements IKinesisConnectorPipeline<String, byte[]> {
 
     @Override
     public IEmitter<byte[]> getEmitter(KinesisConnectorConfiguration configuration) {
-        return new S3Emitter(configuration);
+        return new S3EmitterWithMetadata(configuration);
     }
 
     @Override
